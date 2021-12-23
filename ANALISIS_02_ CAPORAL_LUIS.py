@@ -113,5 +113,31 @@ while acumulador<=80.00: #Para llegar solo al 80%
   acumulador+=por #Para ir acumulando porcentajes
   print(ind+1,'.-',lista_3[ind][0],'    Valor total: $',lista_3[ind][1],'   Porcentaje:',por,'%')
   ind+=1 #Para cambiar de sublista en lista_1
-  
 
+########################### ANÄLISIS EXTRA ############################
+#Se trata de un análisis combinado de rutas más demandadas y transportes usados
+#Dado que en la lista_1 ya está la información [origen,destino,...] la aproechamos para crear una nueva que contenga [origen, destino, [mar, ferroviario, aire, carretera]]
+lista_4=[]
+for j in lista_1: #Iteramos sobre la lista de [origen,destino,...]  
+  mar=0 #Contador para import y exports que se llevan a cabo por agua
+  ferrocarril=0 #Contador para import y exports que se llevan a cabo por ferrocarril
+  aire=0  #Contador para import y exports que se llevan a cabo por aire
+  carretera=0   #Contador para import y exports que se llevan a cabo por carretera
+  for i in datos: #Iteramos sobre todos los diccionarios
+    if (j[0]==i['origin'])and(j[1]==i['destination']):
+      if i['transport_mode']=='Sea': #Para los que se transportan por el mar
+        mar+=int(i['total_value'])
+      elif i['transport_mode']=='Rail':
+        ferrocarril+=int(i['total_value'])  
+      elif i['transport_mode']=='Air':
+        aire+=int(i['total_value'])
+      else: #Solo queda el caso de la carrertera
+        carretera+=int(i['total_value'])
+  lista_4.append([j[0],j[1],mar,ferrocarril,aire,carretera])
+
+with open('Analisis_extra.csv','w') as Analisis: #Creamos un archivo nuevo
+  escritor=csv.writer(Analisis)
+  escritor.writerows(lista_4[0:10]) #Solo guardamos las primeras 10 filas 
+
+print("")
+print("Los datos para el análisis extra se han guardado correctamente en el achivo 'Analisis_extra.csv'")
