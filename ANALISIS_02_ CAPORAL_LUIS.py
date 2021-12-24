@@ -37,15 +37,22 @@ suma=0 #Aquí se obtendrá el valor total de $$$
 for i in lista_1: #Iteramos sobre toda la lista de [origen,destino,$$ valor,...]
   suma+=i[2] #Vamos sumando el $$ valor, de cada ruta
 
-print("Las 10 rutas más demandadas son:")
+print("■ Las 10 rutas más demandadas son:")
 print("")
 conta=0 #Para almacenar la suma total de ingresos
 for i in range(0,10):
   print(i+1,'.-  Origen:',lista_1[i][0],' Destino:',lista_1[i][1],'  $$ Total:',lista_1[i][2])
   print('           ','$$ de importaciones:',lista_1[i][3][0],'   ','$$ de exportaciones:',lista_1[i][3][1])
   conta+=lista_1[i][2] #Incrementamos su valor
+
+# Guardamos este primer análisis en un nuevo archivo
+with open('Opcion_1.csv','w') as opcion1: #Creamos un archivo nuevo
+  escritor=csv.writer(opcion1) #Creamos el objeto para escribir
+  escritor.writerows(lista_1[0:10]) #Solo guardamos las primeras 10 filas
+
 print("")
-print("Ingresos totales:",conta," Porcentaje del total:",(conta/suma)*100)
+print("Ingresos totales:",conta," Porcentaje del total:",(conta/suma)*100,'%')
+print("Primer análisis guardado en 'Opcion_1.csv'") 
 print("")
 lista_2=[] #Aquí iran: [medio de transporte, $$ total, [$import,$export]]
 for i in datos: #Iteramos sobre cada diccionario
@@ -73,11 +80,17 @@ def devo2(lista):
 lista_2.sort(key=devo2,reverse=True) #Ordenará de mayor a menor $$ total, de cada ruta
 
 print("")
-print("Los medios de transporte de mayor a menor importancia son:")
+print("■ Los medios de transporte de mayor a menor importancia son:")
 print("")
 for i in range(0,len(lista_2)):
   print(i+1,'.-',lista_2[i][0],' $$ Imports:',lista_2[i][2][0],' $$ Exports:',lista_2[i][2][1],' $$ Total:',lista_2[i][1])
+# Guardamos este segundo análisis en un nuevo archivo
+with open('Opcion_2.csv','w') as opcion2: #Creamos un archivo nuevo
+  escritor=csv.writer(opcion2) #Creamos el objeto para escribir
+  escritor.writerows(lista_2) 
+print("Segundo análisis guardado en 'Opcion_2.csv'") 
 print("")
+
 lista_3=[] #Aquí irá [país,[$$ importaciones,$$ exportaciones]]
 for i in datos: #Iteramos sobre los diccionarios
   if not([i["origin"]] in lista_3): #Si el país de origen no está
@@ -106,14 +119,19 @@ ind=0 #Para ir iterando sobre la lista_1
 print("")
 print("Valor total de importaciones y exportaciones: $",suma)
 print("Por lo que el 80 % corresponde a:",'$',porcentaje)
-print("Los países que contribuyen a esos ingresos son:")
+print("■ Los países que contribuyen a esos ingresos son:")
 print("")
 while acumulador<=80.00: #Para llegar solo al 80%
   por=(lista_3[ind][1]/suma)*100 #Porcentaje del $$ total
   acumulador+=por #Para ir acumulando porcentajes
   print(ind+1,'.-',lista_3[ind][0],'    Valor total: $',lista_3[ind][1],'   Porcentaje:',por,'%')
   ind+=1 #Para cambiar de sublista en lista_1
-
+# Guardamos este tercer análisis en un nuevo archivo
+with open('Opcion_3.csv','w') as opcion3: #Creamos un archivo nuevo
+  escritor=csv.writer(opcion3) #Creamos el objeto para escribir
+  escritor.writerows(lista_3[0:ind]) #Guardamos hasta el último valor de ind 
+print("Tercer análisis guardado en 'Opcion_3.csv'") 
+print("")
 ########################### ANÄLISIS EXTRA ############################
 #Se trata de un análisis combinado de rutas más demandadas y transportes usados
 #Dado que en la lista_1 ya está la información [origen,destino,...] la aproechamos para crear una nueva que contenga [origen, destino, [mar, ferroviario, aire, carretera]]
@@ -140,4 +158,4 @@ with open('Analisis_extra.csv','w') as Analisis: #Creamos un archivo nuevo
   escritor.writerows(lista_4[0:10]) #Solo guardamos las primeras 10 filas 
 
 print("")
-print("Los datos para el análisis extra se han guardado correctamente en el achivo 'Analisis_extra.csv'")
+print("■ Los datos para el análisis extra se han guardado correctamente en el achivo 'Analisis_extra.csv'")
