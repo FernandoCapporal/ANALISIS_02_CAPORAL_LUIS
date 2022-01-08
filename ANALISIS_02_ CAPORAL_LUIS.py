@@ -26,10 +26,16 @@ for j in lista_1: #iteramos sobre la lista de rutas
         cnt2+=int(i["total_value"])
   j.append(tot) #Como tercer elemento el dinero total que se movió en esa ruta
   j.append([cnt1,cnt2]) #Como cuarto elemento de cada ruta ira el $$ total
+lista_imp=lista_1 #Copia para ordenar por $$ importacion
+lista_exp=lista_1 #Copia para ordenar por $$ export
 
 # Utilizaré la función integrada sort para ordenar de mayor a menor las rutas de acuerdo al $$ que mueven, dado que mi lista_1 es de la forma [origen,destino,$$ total,[$$ importaciones, $$ exportaciones]] para utilizar la función sort también necesitaré el parametro key que ordena de acuerdo a la devolución de alguna función, para ello crée la siguiente función que devuelve el valor del elemento número 2 de cada lista, el cual en mi caso corresponde a $$ total
 def devo(lista):
   return lista[2] #Devuelve el valor en la posición 2 de la lista sobre la que se itera
+def devo_imp(lista): #Mismo principio de funcionamiento que la de arriba
+  return lista[3][0] #Devuelve valor total de importaciones
+def devo_exp(lista): 
+  return lista[3][1] #Devuelve valor total de exportaiones  
 
 lista_1.sort(key=devo,reverse=True) #Ordenará de mayor a menor $$ total, de cada ruta
 
@@ -53,6 +59,7 @@ with open('Opcion_1.csv','w') as opcion1: #Creamos un archivo nuevo
 print("")
 print("Ingresos totales:",conta," Porcentaje del total:",(conta/suma)*100,'%')
 print("Primer análisis guardado en 'Opcion_1.csv'") 
+
 print("")
 lista_2=[] #Aquí iran: [medio de transporte, $$ total, [$import,$export]]
 for i in datos: #Iteramos sobre cada diccionario
@@ -159,3 +166,20 @@ with open('Analisis_extra.csv','w') as Analisis: #Creamos un archivo nuevo
 
 print("")
 print("■ Los datos para el análisis extra se han guardado correctamente en el achivo 'Analisis_extra.csv'")
+
+# Extra. Por si el análisis de rutas se quiere hacer por tipo de movimiento
+
+#Ordenamos las listas por $$ tota ingresos
+lista_imp.sort(key=devo_imp,reverse=True) #Ordenará de mayor a menor $$ total de importacion, de cada ruta
+print("")
+print("")
+print(" ■ EXTRA. Si el primer análisis se quiere dividir por tipo de movimiento:")
+print("")
+print("  ¤ Importaciones:")
+for i in range(0,10):
+  #print(lista_imp[i])
+  print("   ",i+1,'.-  Origen:',lista_imp[i][0],' Destino:',lista_imp[i][1],'  $$ Total:',lista_imp[i][3][0])
+lista_exp.sort(key=devo_exp,reverse=True) #Ordenará de mayor a menor $$ total de exportacion, de cada ruta
+print("  ¤ Exportaciones:")
+for i in range(0,10):
+  print("   ",i+1,'.-  Origen:',lista_exp[i][0],' Destino:',lista_exp[i][1],'  $$ Total:',lista_exp[i][3][1]) 
